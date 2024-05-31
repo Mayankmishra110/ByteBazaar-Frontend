@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchLoggedInUserOrderAsync, selectUserOrders } from "../userSlice";
+import {
+  fetchLoggedInUserOrderAsync,
+  selectUserInfo,
+  selectUserOrders,
+} from "../userSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 
 export default function UserOrders() {
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
 
   useEffect(() => {
@@ -36,7 +40,6 @@ export default function UserOrders() {
                             className="h-full w-full object-cover object-center"
                           />
                         </div>
-
                         <div className="ml-4 flex flex-1 flex-col">
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
@@ -58,7 +61,6 @@ export default function UserOrders() {
                                 Qty :{item.quantity}
                               </label>
                             </div>
-
                             <div className="flex"></div>
                           </div>
                         </div>
@@ -67,7 +69,6 @@ export default function UserOrders() {
                   </ul>
                 </div>
               </div>
-
               <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                 <div className="flex justify-between my-2 text-base font-medium text-gray-900">
                   <p>Subtotal</p>
