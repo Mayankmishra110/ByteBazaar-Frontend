@@ -264,7 +264,6 @@ export default function UserProfile() {
               </div>
             </form>
           ) : null}
-
           <p className="mt-0.5 text-sm text-gray-500">Your Addresses :</p>
           {user.addresses.map((address, index) => (
             <div>
