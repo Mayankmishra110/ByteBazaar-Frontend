@@ -3,6 +3,7 @@ import {
   addToCart,
   deleteItemFromCart,
   fetchItemsByUserId,
+  resetCart,
   updateCart,
 } from "./cartAPI";
 
@@ -46,7 +47,14 @@ export const deleteItemFromCartAsync = createAsyncThunk(
     return response.data;
   }
 );
-
+export const resetCartAsync = createAsyncThunk(
+  "cart/resetCart",
+  async (userId) => {
+    const response = await resetCart(userId);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
 export const counterSlice = createSlice({
   name: "cart",
   initialState,
@@ -70,29 +78,37 @@ export const counterSlice = createSlice({
       .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.items += action.payload;
+      })
+
+      .addCase(updateCartAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateCartAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        state.items[index] = action.payload;
+      })
+      .addCase(deleteItemFromCartAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        state.items.splice(index, 1);
+      })
+      .addCase(resetCartAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(resetCartAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.items = [];
       });
   },
-})
-  .addCase(updateCartAsync.pending, (state) => {
-    state.status = "loading";
-  })
-  .addCase(updateCartAsync.fulfilled, (state, action) => {
-    state.status = "idle";
-    const index = state.items.findIndex(
-      (item) => item.id === action.payload.id
-    );
-    state.items[index] = action.payload;
-  })
-  .addCase(deleteItemFromCartAsync.pending, (state) => {
-    state.status = "loading";
-  })
-  .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
-    state.status = "idle";
-    const index = state.items.findIndex(
-      (item) => item.id === action.payload.id
-    );
-    state.items.splice(index, 1);
-  });
+});
 
 export const { increment } = counterSlice.actions;
 
