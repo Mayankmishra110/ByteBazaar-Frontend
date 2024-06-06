@@ -65,7 +65,7 @@ export default function ProductDetail() {
       delete newItem["id"];
       dispatch(addToCartAsync(newItem));
       // TODO: it will be based on server response of backend
-      alert.error("Item added to Cart");
+      alert.success("Item added to Cart");
     } else {
       alert.error("Item Already added");
     }
